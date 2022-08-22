@@ -14,9 +14,6 @@ const Post = props => {
   }
 
   /* part 1 of frontend issue below */
-  const priorNumVotes = props.post.upVotes - props.post.downVotes;   // use to compare if any upvote/downvote has occurred
-  const [currNumVotes, setVotes] = React.useState(priorNumVotes);
-
   const [isUpVoted, setUpVoteToggle] = React.useState(false)
   const [isDownVoted, setDownVoteToggle] = React.useState(false)
 
@@ -58,6 +55,24 @@ const Post = props => {
       props.post.downVotes++;
     }
   }
+
+  /* props to pass down to Comment for current number of up/downvotes
+  const [timesCUpVoted, setCUpVoteCount] = React.useState(0);
+  const [timesCDownVoted, setCDownVoteCount] = React.useState(0);
+
+  const incrCUpVotes = () => {
+    setCUpVoteCount(timesCUpVoted + 1) 
+  }
+  const decrCUpVotes = () => { 
+    setCUpVoteCount(timesCUpVoted - 1) 
+  }
+  const incrCDownVotes = () => {
+    setCDownVoteCount(timesCDownVoted + 1);
+  }
+  const decrCDownVotes = () => {
+    setCDownVoteCount(timesCDownVoted - 1);
+  }
+  */
 
   return (
     <>
