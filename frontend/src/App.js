@@ -100,26 +100,28 @@ const App = () => {
     })
   }
 
-  const [upVoteCount, setUpVoteCount] = useState(0);
-  const [downVoteCount, setDownVoteCount] = useState(0);
+  /* props to pass down to post for current number of up/downvotes */
+  const [timesUpVoted, setUpVoteCount] = useState(0);
+  const [timesDownVoted, setDownVoteCount] = useState(0);
 
   const incrUpVotes = () => {
-    setUpVoteCount(upVoteCount + 1) 
+    setUpVoteCount(timesUpVoted + 1) 
   }
   const decrUpVotes = () => { 
-    setUpVoteCount(upVoteCount - 1) 
+    setUpVoteCount(timesUpVoted - 1) 
   }
   const incrDownVotes = () => {
-    setDownVoteCount(downVoteCount + 1);
+    setDownVoteCount(timesDownVoted + 1);
   }
   const decrDownVotes = () => {
-    setDownVoteCount(downVoteCount - 1);
+    setDownVoteCount(timesDownVoted - 1);
   }
 
   return (
     <>
       <h1>Hack4Impact Reddit Project</h1>
       <AddPost onSubmit={createPost} />
+      <br></br>
       <SortBy onSelect={getPostsByDate} />
       {posts.map(curr => (
         <Post
@@ -137,6 +139,11 @@ const App = () => {
           decrDownVotes={decrDownVotes}
         />
       ))}
+      <section> 
+        <h4>Page Engagement</h4>
+        <p>Number of posts upvoted: {timesUpVoted}</p>
+        <p>Number of posts downvoted: {timesDownVoted}</p>
+      </section>
     </>
   )
 }
