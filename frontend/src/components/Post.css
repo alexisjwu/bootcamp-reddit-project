@@ -2,6 +2,18 @@
   text-align: center;
 }
 
+.upVoteSelected {
+  text-align: center;
+  font-weight: bold;
+  color: green;
+}
+
+.downVoteSelected {
+  text-align: center;
+  font-weight: bold;
+  color: red;
+}
+
 .post {
   border: 1px solid black;
   /* margin: 5px 0px 5px 5px; */
@@ -31,7 +43,6 @@
 .arrows {
   display: flex;
   flex-direction: column;
-
 }
 
 .arrows button {

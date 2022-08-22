@@ -13,15 +13,61 @@ const Post = props => {
     props.onComment(props.post._id, commentData)
   }
 
+  /* part 1 of frontend issue below */
+  const priorNumVotes = props.post.upVotes - props.post.downVotes;   // use to compare if any upvote/downvote has occurred
+  const [currNumVotes, setVotes] = React.useState(priorNumVotes);
+
+  const [isUpVoted, setUpVoteToggle] = React.useState(false)
+  const [isDownVoted, setDownVoteToggle] = React.useState(false)
+
+  const onUpVoteClick = () => {
+    // upvote button is selected (downvote is by definition not selected)
+    if (isUpVoted) {
+      setUpVoteToggle(!isUpVoted);    // change isUpVoted to false
+      props.decrUpVotes();     // we cannot upvote anymore since we've already upvoted (double clicking toggles upvote off)
+      props.post.upVotes--;    // decrement number upvotes
+    }
+    // otherwise, upvote button is not selected
+    else {
+      // case 1: downvote button is selected (meaning we have to unselect downvote)
+      if (isDownVoted) {
+        setDownVoteToggle(!isDownVoted);    // change isDownVoted to false
+        props.decrDownVotes();        // decrement the number of downvotes (we are removing downvote)
+        props.post.downVotes--;
+      }
+      setUpVoteToggle(!isUpVoted);        // change isUpVoted to true
+      props.incrUpVotes();          // increment num upvotes
+      props.post.upVotes++;
+    }
+  }
+
+  const onDownVoteClick = () => {
+    // downvote button is selected (upvote is by definition not selected)
+    if (isDownVoted) {
+      setDownVoteToggle(!isDownVoted);
+      props.decrDownVotes();     // we cannot dv anymore since we've already downvoted (toggle off)
+      props.post.downVotes--;    // decrement number upvotes
+    } else {
+      if (isUpVoted) {
+        setUpVoteToggle(!isUpVoted);    // change isDownVoted to false
+        props.decrUpVotes();        // decrement the number of downvotes (we are removing downvote)
+        props.post.upVotes--;
+      }
+      setDownVoteToggle(!isDownVoted);        // change isUpVoted to true
+      props.incrDownVotes();          // increment num upvotes
+      props.post.downVotes++;
+    }
+  }
+
   return (
     <>
       <section className="post">
         <div className="arrows">
-          <button>↑</button>
-          <span className="center">
+          <button onClick={onUpVoteClick}>↑</button>
+          <span className={isUpVoted ? "upVoteSelected" : isDownVoted ? "downVoteSelected" : "center"}>
             {props.post.upVotes - props.post.downVotes}
           </span>
-          <button>↓</button>
+          <button onClick={onDownVoteClick}>↓</button>
         </div>
         <div className="post-body">
           <div className="author">Posted by {props.post.author}</div>
