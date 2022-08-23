@@ -95,3 +95,26 @@ module.exports.comment = (req, res, next) => {
       return next()
     })
 }
+
+module.exports.testDate = (req, res, next) => {
+  let postDate = new Date("March 9, 1993");
+  let newPost = new Post({
+    author: "myg",
+    title: "Here's a test title!",
+    text: "This date is a good date",
+    createdAt: postDate.toISOString()
+  })
+  newPost
+    .save()
+    .then(post => {
+      res.locals.data = { post }
+      res.locals.status = 201
+      return next()
+    })
+    .catch(err => {
+      console.error(err)
+      res.locals.error = { error: err.message }
+      res.locals.status = 400
+      return next()
+    })
+}
