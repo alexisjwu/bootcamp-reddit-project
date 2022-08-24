@@ -2,9 +2,67 @@ const { Post } = require('../models')
 
 /* backend issue task 2 - filter by date range */
 module.exports.index = (req, res, next) => {
-  let currentDate = new Date(req.query.currentDate);
+  let currentDate = new Date(req.query.currDate);
   let dateRange = req.query.dateRange;
-  Post.find()
+
+  // case where a filter is selected
+  if (dateRange != undefined) {
+    if (dateRange === "Past week") {
+      query = {
+        "createdAt" : {
+          $lt: currentDate.getDate(), 
+          $gte: new Date(currentDate.getDate() - 7)
+        }
+      }
+    }
+    else if (dateRange === "Past month") {
+      console.log(rangeEarliest);
+      query = {
+        "createdAt" : {
+          $lt: currentDate.getDate(), 
+          $gte: new Date(currentDate.getDate() - 31)
+        }
+      }
+    }
+    else if (dateRange === "Past year") {
+      query = {
+        "createdAt" : {
+          $lt: currentDate.getDate(), 
+          $gte: new Date(currentDate.getDate() - 365)
+        }
+      }
+    }
+    else if (dateRange === "A year ago") {
+      let yearFromToday = new Date(currentDate.getDate() - 365);
+      query = {
+        "createdAt" : {
+          $lt: yearFromToday.getDate(),
+          $gte: yearFromToday.getDate() - 365
+        }
+      }
+    }
+    else if (dateRange === "Ancient times") {   // before 10 years ago
+      query = {
+        "createdAt" : {
+          $lt: new Date(currentDate.getDate() - 3650)
+        }
+      }
+    }
+    Post.find(query)
+      .populate('comments')
+      .sort('-createdAt')
+      .then(posts => {
+        res.locals.data = { posts }
+        res.locals.status = 200
+        return next()
+      })
+      .catch(err => {
+        console.error(err)
+        res.locals.error = { error: err.message }
+        return next()
+      })
+  } else {
+    Post.find()
     .populate('comments')
     .sort('-createdAt')
     .then(posts => {
@@ -17,6 +75,7 @@ module.exports.index = (req, res, next) => {
       res.locals.error = { error: err.message }
       return next()
     })
+  }
 }
 
 module.exports.get = (req, res, next) => {
@@ -101,12 +160,14 @@ module.exports.comment = (req, res, next) => {
 
 /* backend issue task 1 (set up an endpoint for a test date) */
 module.exports.date = (req, res, next) => {
-  console.log(req.query.currentDate);
+  // console.log(req.query.currentDate);
+  // we create the query createdAt value (i.e. "August 3, 2022") through Postman!
+  // alternatively, we could just hardcode it via: postDate = new Date("August 3, 2022")
   let postDate = new Date(req.query.createdAt);
   let newPost = new Post({
-    author: "alexisjwu",
-    title: "FIRST REDDIT POST!",
-    text: "it's actually working :D",
+    author: "adalovelace",
+    title: "first time using reddit",
+    text: "yassssssss",
     createdAt: postDate.toISOString()
   })
   newPost
