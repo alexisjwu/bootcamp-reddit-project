@@ -1,6 +1,9 @@
 const { Post } = require('../models')
 
+/* backend issue task 2 - filter by date range */
 module.exports.index = (req, res, next) => {
+  let currentDate = new Date(req.query.currentDate);
+  let dateRange = req.query.dateRange;
   Post.find()
     .populate('comments')
     .sort('-createdAt')
@@ -96,12 +99,14 @@ module.exports.comment = (req, res, next) => {
     })
 }
 
-module.exports.testDate = (req, res, next) => {
-  let postDate = new Date("March 9, 1993");
+/* backend issue task 1 (set up an endpoint for a test date) */
+module.exports.date = (req, res, next) => {
+  console.log(req.query.currentDate);
+  let postDate = new Date(req.query.createdAt);
   let newPost = new Post({
-    author: "myg",
-    title: "Here's a test title!",
-    text: "This date is a good date",
+    author: "alexisjwu",
+    title: "FIRST REDDIT POST!",
+    text: "it's actually working :D",
     createdAt: postDate.toISOString()
   })
   newPost

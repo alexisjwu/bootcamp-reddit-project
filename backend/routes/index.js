@@ -17,7 +17,7 @@ router.get("/posts", controllers.posts.index);
 /** 
  * Post the dates for each post
  */
-router.post("/dates", controllers.posts.testDate);
+router.post("/date", controllers.posts.date);
 
 /**
  * Create a new post.
